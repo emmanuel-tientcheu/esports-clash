@@ -1,6 +1,7 @@
 package com.example.esport_clash.player;
 
 import com.example.esport_clash.PostgreSQLTestConfiguration;
+import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
 import com.example.esport_clash.player.infrastructure.spring.CreatePlayerDTO;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +28,7 @@ public class CreatePlayerE2ETests {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private InMemoryPlayerRepository repository;
+    private PlayerRepository repository;
 
     @Test
     public void shouldCreatePlayer() throws Exception {

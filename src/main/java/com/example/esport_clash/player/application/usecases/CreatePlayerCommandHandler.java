@@ -1,6 +1,7 @@
 package com.example.esport_clash.player.application.usecases;
 
 import an.awesome.pipelinr.Command;
+import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
 import com.example.esport_clash.player.domain.model.Player;
 import com.example.esport_clash.player.domain.viewModel.IdResponse;
@@ -8,9 +9,9 @@ import com.example.esport_clash.player.domain.viewModel.IdResponse;
 import java.util.UUID;
 
 public class CreatePlayerCommandHandler implements Command.Handler<CreatePlayerCommand, IdResponse> {
-    private final InMemoryPlayerRepository repository;
+    private final PlayerRepository repository;
 
-    public CreatePlayerCommandHandler(final InMemoryPlayerRepository repository) {
+    public CreatePlayerCommandHandler(final PlayerRepository repository) {
         this.repository = repository;
     }
 
