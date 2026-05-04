@@ -3,6 +3,7 @@ package com.example.esport_clash.player.infrastructure.spring;
 import an.awesome.pipelinr.Pipeline;
 import com.example.esport_clash.player.application.usecases.ChangePlayerNameCommand;
 import com.example.esport_clash.player.application.usecases.CreatePlayerCommand;
+import com.example.esport_clash.player.application.usecases.DeletePlayerCommand;
 import com.example.esport_clash.player.domain.viewModel.IdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,12 @@ public class PlayerController {
     public ResponseEntity<Void> changePlayerName(@RequestBody RenamePlayerDTO dto, @PathVariable String id){
         this.pipeline.send(new ChangePlayerNameCommand(id, dto.getName()));
         return new ResponseEntity<>( HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlayer(@PathVariable String id) {
+        this.pipeline.send(new DeletePlayerCommand(id));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

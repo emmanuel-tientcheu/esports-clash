@@ -27,4 +27,9 @@ public class SQLPlayerRepository implements PlayerRepository {
         var sqlPlayer = new SQLPlayer(player.getId(), player.getName());
         this.dataAccessor.save(sqlPlayer);
     }
+
+    @Override
+    public void delete(Player player) {
+        this.dataAccessor.deleteById(player.getId());
+    }
 }
