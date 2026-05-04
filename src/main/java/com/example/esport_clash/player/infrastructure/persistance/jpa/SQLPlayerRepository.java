@@ -3,6 +3,9 @@ package com.example.esport_clash.player.infrastructure.persistance.jpa;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.domain.model.Player;
 
+import java.util.Optional;
+import java.util.OptionalLong;
+
 public class SQLPlayerRepository implements PlayerRepository {
     private final SQLPlayerDataAccessor dataAccessor;
 
@@ -11,15 +14,12 @@ public class SQLPlayerRepository implements PlayerRepository {
     }
 
     @Override
-    public Player findById(String id) {
-        var sqlPlayerQuery = this.dataAccessor.findById(id);
-
-        if(sqlPlayerQuery.isEmpty()) { return null; }
-        var sqlPlayer = sqlPlayerQuery.get();
-        return new Player(
-                sqlPlayer.getId(),
-                sqlPlayer.getName()
-        );
+    public Optional<Player> findById(String id) {
+        return dataAccessor.findById(id)
+                .map(sqlPlayer -> new Player(
+                        sqlPlayer.getId(),
+                        sqlPlayer.getName()
+                ));
     }
 
     @Override

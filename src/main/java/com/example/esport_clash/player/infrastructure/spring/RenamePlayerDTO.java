@@ -1,10 +1,12 @@
-package com.example.esport_clash.player.domain.model;
+package com.example.esport_clash.player.infrastructure.spring;
 
-public class Player {
+public class RenamePlayerDTO {
     private String id;
     private String name;
 
-    public Player(final String id, final String name) {
+    public RenamePlayerDTO() {}
+
+    public RenamePlayerDTO(String id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -16,6 +18,4 @@ public class Player {
     public String getId() {
         return this.id;
     }
-
-    public void rename(String name) { this.name = name; }
 }

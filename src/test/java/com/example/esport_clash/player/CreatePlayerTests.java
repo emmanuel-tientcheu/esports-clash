@@ -20,7 +20,7 @@ public class CreatePlayerTests {
 
         var expectedPlayer = new Player("id", "name");
 
-        Player actualPlayer = repository.findById(response.getId());
+        Player actualPlayer = repository.findById(response.getId()).get();
         Assertions.assertEquals(actualPlayer.getName(), expectedPlayer.getName());
     }
 }

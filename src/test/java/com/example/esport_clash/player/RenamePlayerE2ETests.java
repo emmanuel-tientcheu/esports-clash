@@ -2,8 +2,10 @@ package com.example.esport_clash.player;
 
 import com.example.esport_clash.PostgreSQLTestConfiguration;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
+import com.example.esport_clash.player.domain.model.Player;
 import com.example.esport_clash.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
 import com.example.esport_clash.player.infrastructure.spring.CreatePlayerDTO;
+import com.example.esport_clash.player.infrastructure.spring.RenamePlayerDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,10 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(PostgreSQLTestConfiguration.class)
-public class CreatePlayerE2ETests {
+public class RenamePlayerE2ETests {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc  mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -31,24 +33,36 @@ public class CreatePlayerE2ETests {
     private PlayerRepository repository;
 
     @Test
-    public void shouldCreatePlayer() throws Exception {
-        var dto = new CreatePlayerDTO("name");
+    public void shouldRenamePlayer() throws Exception {
+        Player existingPlayer = new Player("123", "old name");
+        repository.save(existingPlayer);
 
-        var result = mockMvc
-                .perform(MockMvcRequestBuilders.post("/players")
+        var dto = new RenamePlayerDTO(existingPlayer.getId(), "new name");
+
+        var result = mockMvc.perform(
+                MockMvcRequestBuilders.patch("/players/123/rename")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-        var IdResponse = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                com.example.esport_clash.player.domain.viewModel.IdResponse.class
-        );
+        var player = repository.findById(existingPlayer.getId());
 
-        var expectedPlayer = repository.findById(IdResponse.getId());
+        Assertions.assertEquals(dto.getName(), player.get().getName());
 
-        Assertions.assertNotNull(IdResponse);
-        Assertions.assertEquals(dto.getName(), expectedPlayer.get().getName());
+    }
+
+    @Test
+    public void whenDoesNotPlayer_ShouldThrow() throws Exception {
+
+        var dto = new RenamePlayerDTO("garbage", "new name");
+
+        var result = mockMvc.perform(
+                        MockMvcRequestBuilders.patch("/players/123/rename")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+
+
     }
 }
