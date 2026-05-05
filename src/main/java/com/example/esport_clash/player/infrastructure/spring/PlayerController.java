@@ -1,10 +1,9 @@
 package com.example.esport_clash.player.infrastructure.spring;
 
 import an.awesome.pipelinr.Pipeline;
-import com.example.esport_clash.player.application.usecases.ChangePlayerNameCommand;
-import com.example.esport_clash.player.application.usecases.CreatePlayerCommand;
-import com.example.esport_clash.player.application.usecases.DeletePlayerCommand;
+import com.example.esport_clash.player.application.usecases.*;
 import com.example.esport_clash.player.domain.viewModel.IdResponse;
+import com.example.esport_clash.player.domain.viewModel.PlayerViewResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +15,12 @@ public class PlayerController {
 
     PlayerController(final Pipeline pipeline) {
         this.pipeline = pipeline;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PlayerViewResponse> getPlayerById(@PathVariable("id") String id) {
+        var result = this.pipeline.send(new GetPlayerByIdCommand(id));
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping

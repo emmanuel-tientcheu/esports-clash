@@ -3,6 +3,7 @@ package com.example.esport_clash.player.infrastructure.spring;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.application.usecases.ChangePlayerNameCommandHandler;
 import com.example.esport_clash.player.application.usecases.DeletePlayerCommandHandler;
+import com.example.esport_clash.player.application.usecases.GetPlayerByIdCommandHandler;
 import com.example.esport_clash.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
 import com.example.esport_clash.player.application.usecases.CreatePlayerCommandHandler;
 import org.springframework.context.annotation.Bean;
@@ -23,5 +24,10 @@ public class PlayerUseCaseConfiguration {
     @Bean
     public DeletePlayerCommandHandler deletePlayerUseCase(final PlayerRepository playerRepository) {
         return new DeletePlayerCommandHandler(playerRepository);
+    }
+
+    @Bean
+    public GetPlayerByIdCommandHandler getPlayerByIdUseCase(final PlayerRepository playerRepository) {
+        return new GetPlayerByIdCommandHandler(playerRepository);
     }
 }
