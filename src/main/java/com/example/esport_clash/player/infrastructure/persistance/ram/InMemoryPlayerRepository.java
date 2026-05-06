@@ -1,5 +1,6 @@
 package com.example.esport_clash.player.infrastructure.persistance.ram;
 
+import com.example.esport_clash.core.infrastructure.persistance.ram.InMemoryBaseRepository;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.domain.model.Player;
 
@@ -8,22 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class InMemoryPlayerRepository implements PlayerRepository {
-    private Map<String, Player> players = new HashMap<>();
-
-    @Override
-    public Optional<Player> findById(String id) {
-        return Optional.ofNullable(players.get(id));
-    }
-
-    @Override
-    public void save(Player palyer) {
-        players.put(palyer.getId(), palyer);
-    }
-
-    @Override
-    public void delete(Player player) {
-        players.remove(player.getId());
-    }
+public class InMemoryPlayerRepository extends InMemoryBaseRepository<Player> implements PlayerRepository {
 
 }

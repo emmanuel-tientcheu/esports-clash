@@ -2,13 +2,13 @@ package com.example.esport_clash.player.infrastructure.persistance.jpa;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "players")
+//@Entity
+//@Table(name = "players")
 public class SQLPlayer {
-    @Id
+//    @Id
     public String id;
 
-    @Column
+//    @Column
     public String name;
 
     public SQLPlayer() {}

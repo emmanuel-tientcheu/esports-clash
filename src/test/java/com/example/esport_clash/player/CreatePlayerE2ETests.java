@@ -4,6 +4,7 @@ import com.example.esport_clash.PostgreSQLTestConfiguration;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
 import com.example.esport_clash.player.infrastructure.spring.CreatePlayerDTO;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(PostgreSQLTestConfiguration.class)
+@Transactional
+
 public class CreatePlayerE2ETests {
 
     @Autowired

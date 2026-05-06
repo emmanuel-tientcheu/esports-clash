@@ -1,7 +1,17 @@
 package com.example.esport_clash.player.domain.model;
 
-public class Player {
+import com.example.esport_clash.core.domain.model.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "players")
+public class Player extends BaseEntity {
+    @Id
     private String id;
+    @Column
     private String name;
 
     public Player(final String id, final String name) {

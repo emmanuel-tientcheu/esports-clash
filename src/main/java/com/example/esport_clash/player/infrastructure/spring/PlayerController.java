@@ -4,12 +4,14 @@ import an.awesome.pipelinr.Pipeline;
 import com.example.esport_clash.player.application.usecases.*;
 import com.example.esport_clash.player.domain.viewModel.IdResponse;
 import com.example.esport_clash.player.domain.viewModel.PlayerViewResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/players")
+@Transactional
 public class PlayerController {
     private final Pipeline pipeline;
 
