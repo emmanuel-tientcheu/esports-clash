@@ -9,13 +9,11 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "players")
 public class Player extends BaseEntity {
-    @Id
-    private String id;
     @Column
     private String name;
 
     public Player(final String id, final String name) {
-        this.id = id;
+        super(id);
         this.name = name;
     }
 
