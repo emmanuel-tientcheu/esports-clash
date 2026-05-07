@@ -15,4 +15,9 @@ public class SQLUserRepository extends SQLBaseRepository<User> implements UserRe
     public Class<User> getEntityMangerClass() {
         return User.class;
     }
+
+    @Override
+    public boolean isEmailAddressAvailable(String email) {
+        return false;
+    }
 }

@@ -19,6 +19,12 @@ public class RegisterCommandHandler implements Command.Handler<RegisterCommand, 
 
     @Override
     public IdResponse handle(RegisterCommand command) {
+        var isEmailAvailable = this.repository.isEmailAddressAvailable(command.getEmail());
+
+        if(!isEmailAvailable) {
+            throw new IllegalArgumentException("Email is already is use");
+        }
+
         var user = new User(
                 UUID.randomUUID().toString(),
                 command.getEmail(),
