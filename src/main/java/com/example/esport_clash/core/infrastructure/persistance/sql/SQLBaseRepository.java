@@ -26,5 +26,10 @@ public abstract class SQLBaseRepository<T extends BaseEntity> implements BaseRep
         this.entityManager.remove(entity);
     }
 
+    @Override
+    public void clear() {
+        this.entityManager.createQuery("DELETE * FROM " + getEntityMangerClass().getSimpleName()).executeUpdate();
+    }
+
     public abstract Class<T> getEntityMangerClass();
 }

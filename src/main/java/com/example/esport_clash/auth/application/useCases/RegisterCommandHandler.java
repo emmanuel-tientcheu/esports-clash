@@ -1,6 +1,7 @@
 package com.example.esport_clash.auth.application.useCases;
 
 import an.awesome.pipelinr.Command;
+import com.example.esport_clash.auth.application.exception.EmailUnavailableException;
 import com.example.esport_clash.auth.application.ports.UserRepository;
 import com.example.esport_clash.auth.application.services.passwordHasher.PasswordHasher;
 import com.example.esport_clash.auth.domain.model.User;
@@ -22,7 +23,7 @@ public class RegisterCommandHandler implements Command.Handler<RegisterCommand, 
         var isEmailAvailable = this.repository.isEmailAddressAvailable(command.getEmail());
 
         if(!isEmailAvailable) {
-            throw new IllegalArgumentException("Email is already is use");
+            throw new EmailUnavailableException();
         }
 
         var user = new User(

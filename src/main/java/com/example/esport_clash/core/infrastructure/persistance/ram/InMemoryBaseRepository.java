@@ -25,5 +25,6 @@ public abstract class InMemoryBaseRepository<T extends BaseEntity> implements Ba
         this.entities.remove(entity.getId());
     }
 
+    @Override
     public void clear() { this.entities.clear(); }
 }
