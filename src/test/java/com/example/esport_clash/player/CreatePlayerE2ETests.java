@@ -1,5 +1,6 @@
 package com.example.esport_clash.player;
 
+import com.example.esport_clash.IntegrationTest;
 import com.example.esport_clash.PostgreSQLTestConfiguration;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
@@ -17,12 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Import(PostgreSQLTestConfiguration.class)
-@Transactional
-
-public class CreatePlayerE2ETests {
+public class CreatePlayerE2ETests extends IntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,6 +35,7 @@ public class CreatePlayerE2ETests {
 
         var result = mockMvc
                 .perform(MockMvcRequestBuilders.post("/players")
+                        .header("Authorization", createJWT())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())

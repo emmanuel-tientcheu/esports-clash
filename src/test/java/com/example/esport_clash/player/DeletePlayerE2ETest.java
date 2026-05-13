@@ -1,5 +1,6 @@
 package com.example.esport_clash.player;
 
+import com.example.esport_clash.IntegrationTest;
 import com.example.esport_clash.PostgreSQLTestConfiguration;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.domain.model.Player;
@@ -24,7 +25,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @Import(PostgreSQLTestConfiguration.class)
 @Transactional
 
-public class DeletePlayerE2ETest {
+public class DeletePlayerE2ETest extends IntegrationTest {
 
     @Autowired
     private MockMvc  mockMvc;
@@ -43,6 +44,7 @@ public class DeletePlayerE2ETest {
 
         var result = mockMvc.perform(
                         MockMvcRequestBuilders.delete("/players/"+ existingPlayer.getId())
+                                .header("Authorization", createJWT())
                                 .contentType(MediaType.APPLICATION_JSON)
                                )
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
@@ -58,6 +60,7 @@ public class DeletePlayerE2ETest {
 
         var result = mockMvc.perform(
                         MockMvcRequestBuilders.delete("/players/123")
+                                .header("Authorization", createJWT())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 )
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

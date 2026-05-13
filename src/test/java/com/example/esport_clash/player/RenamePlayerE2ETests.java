@@ -1,5 +1,6 @@
 package com.example.esport_clash.player;
 
+import com.example.esport_clash.IntegrationTest;
 import com.example.esport_clash.PostgreSQLTestConfiguration;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.domain.model.Player;
@@ -23,7 +24,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 @Import(PostgreSQLTestConfiguration.class)
 @Transactional
-public class RenamePlayerE2ETests {
+public class RenamePlayerE2ETests extends IntegrationTest {
 
     @Autowired
     private MockMvc  mockMvc;
@@ -43,6 +44,8 @@ public class RenamePlayerE2ETests {
 
         var result = mockMvc.perform(
                 MockMvcRequestBuilders.patch("/players/123/rename")
+                        .header("Authorization", createJWT())
+
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -60,6 +63,8 @@ public class RenamePlayerE2ETests {
 
         var result = mockMvc.perform(
                         MockMvcRequestBuilders.patch("/players/123/rename")
+                                .header("Authorization", createJWT())
+
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

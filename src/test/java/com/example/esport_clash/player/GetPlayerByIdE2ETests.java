@@ -1,6 +1,10 @@
 package com.example.esport_clash.player;
 
+import com.example.esport_clash.IntegrationTest;
 import com.example.esport_clash.PostgreSQLTestConfiguration;
+import com.example.esport_clash.auth.application.ports.UserRepository;
+import com.example.esport_clash.auth.application.services.jwtservice.JWTService;
+import com.example.esport_clash.auth.domain.model.User;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.domain.model.Player;
 import com.example.esport_clash.player.domain.viewModel.PlayerViewResponse;
@@ -20,12 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Import(PostgreSQLTestConfiguration.class)
-@Transactional
-
-public class GetPlayerByIdE2ETests {
+public class GetPlayerByIdE2ETests extends IntegrationTest {
 
     @Autowired
     private MockMvc  mockMvc;
@@ -36,13 +35,17 @@ public class GetPlayerByIdE2ETests {
     @Autowired
     private PlayerRepository repository;
 
+
+
     @Test
     public void shouldGetPlayer() throws Exception {
         Player existingPlayer = new Player("123", "old name");
         repository.save(existingPlayer);
 
         var result = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/players/123")
+                        MockMvcRequestBuilders
+                                .get("/players/123")
+                                .header("Authorization", createJWT())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
@@ -63,7 +66,9 @@ public class GetPlayerByIdE2ETests {
         var dto = new RenamePlayerDTO("garbage", "new name");
 
         var result = mockMvc.perform(
-                        MockMvcRequestBuilders.get("/players/123")
+                        MockMvcRequestBuilders
+                                .get("/players/123")
+                                .header("Authorization", createJWT())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
 
