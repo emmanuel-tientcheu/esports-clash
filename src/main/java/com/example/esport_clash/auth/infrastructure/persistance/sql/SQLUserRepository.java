@@ -5,6 +5,8 @@ import com.example.esport_clash.auth.domain.model.User;
 import com.example.esport_clash.core.infrastructure.persistance.sql.SQLBaseRepository;
 import jakarta.persistence.EntityManager;
 
+import java.util.Optional;
+
 public class SQLUserRepository extends SQLBaseRepository<User> implements UserRepository {
 
     public SQLUserRepository(EntityManager entity) {
@@ -19,5 +21,10 @@ public class SQLUserRepository extends SQLBaseRepository<User> implements UserRe
     @Override
     public boolean isEmailAddressAvailable(String email) {
         return false;
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return Optional.empty();
     }
 }
