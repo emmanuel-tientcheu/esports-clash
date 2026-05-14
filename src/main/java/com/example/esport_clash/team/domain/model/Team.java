@@ -1,18 +1,19 @@
 package com.example.esport_clash.team.domain.model;
 
+import com.example.esport_clash.core.domain.model.BaseEntity;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Team {
-    private String id;
+public class Team extends BaseEntity {
     private String name;
     private Set<TeamMember> members;
 
     public Team() {}
 
     public Team(String id, String name) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.members = new HashSet<TeamMember>();
     }
@@ -45,6 +46,10 @@ public class Team {
                 .stream()
                 .anyMatch(members -> members.getPlayerId().equals(playerId) && members.role == role);
 
+    }
+
+    public String getName() {
+        return name;
     }
 
 
