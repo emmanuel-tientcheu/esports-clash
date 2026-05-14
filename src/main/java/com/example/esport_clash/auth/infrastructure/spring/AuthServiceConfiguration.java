@@ -18,7 +18,7 @@ public class AuthServiceConfiguration {
     public JWTService jwtService() {
         return new ConcreteJWTService(
                 "ultra_secret_key_please_dont_share_and_change_this",
-                60
+                3600
         );
     }
 }

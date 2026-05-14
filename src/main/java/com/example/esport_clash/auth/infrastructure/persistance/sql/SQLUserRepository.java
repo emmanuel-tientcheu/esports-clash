@@ -9,8 +9,11 @@ import java.util.Optional;
 
 public class SQLUserRepository extends SQLBaseRepository<User> implements UserRepository {
 
-    public SQLUserRepository(EntityManager entity) {
+    private final SQLUserAccessor userAccessor;
+
+    public SQLUserRepository(EntityManager entity, SQLUserAccessor userAccessor) {
         super(entity);
+        this.userAccessor = userAccessor;
     }
 
     @Override
@@ -20,11 +23,11 @@ public class SQLUserRepository extends SQLBaseRepository<User> implements UserRe
 
     @Override
     public boolean isEmailAddressAvailable(String email) {
-        return false;
+        return !this.userAccessor.existsByEmail(email);
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return Optional.empty();
+        return this.userAccessor.findByEmail(email);
     }
 }
