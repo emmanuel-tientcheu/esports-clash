@@ -20,7 +20,7 @@ public class Team extends BaseEntity<Team> {
     }
 
     private Team(String id, String name, Set<TeamMember> members) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.members = members;
     }
