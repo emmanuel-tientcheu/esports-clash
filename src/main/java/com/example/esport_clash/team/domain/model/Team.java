@@ -5,8 +5,9 @@ import com.example.esport_clash.core.domain.model.BaseEntity;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-public class Team extends BaseEntity {
+public class Team extends BaseEntity<Team> {
     private String name;
     private Set<TeamMember> members;
 
@@ -16,6 +17,21 @@ public class Team extends BaseEntity {
         super(id);
         this.name = name;
         this.members = new HashSet<TeamMember>();
+    }
+
+    private Team(String id, String name, Set<TeamMember> members) {
+        this.id = id;
+        this.name = name;
+        this.members = members;
+    }
+
+    @Override
+    public Team deepClone() {
+        return new Team(
+                this.id,
+                this.name,
+                this.members.stream().map(TeamMember::deepClone).collect(Collectors.toSet())
+        );
     }
 
     public void addMember(String playerId, Role role) {
@@ -53,21 +69,21 @@ public class Team extends BaseEntity {
     }
 
 
-    public class TeamMember {
-        private String id;
+    public class TeamMember extends BaseEntity<TeamMember>{
         private String playerId;
         private Role role;
 
         public TeamMember() {}
 
         private TeamMember (String id, String playerId, Role role) {
-            this.id = id;
+            super(id);
             this.playerId = playerId;
             this.role = role;
         }
 
-        public String getId() {
-            return id;
+        @Override
+        public TeamMember deepClone() {
+            return new TeamMember(this.id, this.playerId, this.role);
         }
 
         public String getPlayerId() {

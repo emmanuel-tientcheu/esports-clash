@@ -3,14 +3,12 @@ package com.example.esport_clash.team.infrastructure.spring.controller;
 import an.awesome.pipelinr.Pipeline;
 import com.example.esport_clash.player.domain.viewModel.IdResponse;
 import com.example.esport_clash.team.application.useCases.CreateTeamCommand;
+import com.example.esport_clash.team.application.useCases.DeleteTeamCommand;
 import com.example.esport_clash.team.infrastructure.spring.dto.CreateTeamDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/teams")
@@ -26,5 +24,11 @@ public class TeamController {
     ResponseEntity<IdResponse> createTeam(@RequestBody CreateTeamDTO dto) {
         var result = this.pipeline.send(new CreateTeamCommand(dto.getName()));
         return new ResponseEntity<>(result, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteTeam(@PathVariable("id") String id) {
+        this.pipeline.send(new DeleteTeamCommand(id));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

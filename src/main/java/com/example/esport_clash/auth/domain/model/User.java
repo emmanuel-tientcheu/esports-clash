@@ -7,13 +7,18 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity<User> {
     @Column
     private String email;
     @Column
     private String password;
 
     public User() {}
+
+    @Override
+    public User deepClone() {
+        return new User(this.id, this.email, this.password);
+    }
 
     public User(String id, String email, String password) {
         super(id);
