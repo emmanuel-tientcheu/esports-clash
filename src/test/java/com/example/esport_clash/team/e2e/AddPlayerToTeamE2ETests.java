@@ -61,4 +61,20 @@ public class AddPlayerToTeamE2ETests extends IntegrationTest {
 
         Assertions.assertTrue(expectedTeams.hasMember(player.getId(), Role.TOP));
     }
+
+    @Test
+    void whenPlayerIsAlreadyInTheTeam_ShouldThrow() throws Exception {
+        team.addMember(player.getId(), Role.JUNGLE);
+        teamRepository.save(team);
+
+        var dto = new AddPlayerToTeamDTO(player.getId(), team.getId(), "TOP");
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/teams/add-player-to-team")
+                                .header("Authorization", createJWT())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto))
+                )
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+    }
 }

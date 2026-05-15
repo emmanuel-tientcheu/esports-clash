@@ -1,5 +1,6 @@
 package com.example.esport_clash.team.useCases;
 
+import com.example.esport_clash.core.domain.exceptions.BadRequestException;
 import com.example.esport_clash.core.domain.exceptions.NotFoundException;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.domain.model.Player;
@@ -74,6 +75,23 @@ public class AddPlayerToTeamTests {
         );
 
         Assertions.assertEquals("Team with the key garbage was not found", exception.getMessage());
+    }
+
+    @Test
+    void whenPlayerIsAlreadyInTheTeam_ShouldThrow() {
+        var command = new AddPlayerToTeamCommand(player.getId(), team.getId(), Role.TOP);
+        var useCase = addPlayerToTeamCommandHandler();
+
+        useCase.handle(command);
+
+        var expectedTeam = teamRepository.findById(team.getId()).get();
+
+        Assertions.assertTrue(expectedTeam.hasMember(command.getPlayerId(), command.getRole()));
+
+       Assertions.assertThrows(
+               BadRequestException.class,
+               () ->  useCase.handle(command)
+       );
     }
 }
 

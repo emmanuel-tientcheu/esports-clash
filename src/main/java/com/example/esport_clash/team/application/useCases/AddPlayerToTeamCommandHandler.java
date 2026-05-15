@@ -1,6 +1,7 @@
 package com.example.esport_clash.team.application.useCases;
 
 import an.awesome.pipelinr.Command;
+import com.example.esport_clash.core.domain.exceptions.BadRequestException;
 import com.example.esport_clash.core.domain.exceptions.NotFoundException;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.team.application.ports.TeamRepository;
@@ -24,6 +25,10 @@ public class AddPlayerToTeamCommandHandler implements Command.Handler<AddPlayerT
         var player = playerRepository.findById(command.getPlayerId()).orElseThrow(
                 () -> new NotFoundException("Player", command.getPlayerId())
         );
+
+        if(teamRepository.getTeamByPlayerId(command.getPlayerId()).isPresent()) {
+            throw new BadRequestException("this Player is already in the team");
+        }
 
         team.addMember(player.getId(), command.getRole());
 
