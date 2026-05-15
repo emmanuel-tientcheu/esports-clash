@@ -7,9 +7,11 @@ import com.example.esport_clash.team.domain.model.Team;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CreateScheduleTest {
+public class ScheduleTest {
     public Team createTeam(String id) {
         var team = new Team("t1", id+"team");
         team.addMember(id + "-1", Role.TOP);
@@ -35,7 +37,7 @@ public class CreateScheduleTest {
         var team2 = createTeam("t2");
         var moment = Moment.MORNING;
 
-        var schedule = new Schedule("1");
+        var schedule = new Schedule("1", LocalDate.now());
         schedule.organize(team1, team2, moment);
 
         var match = schedule.getAt(moment);
@@ -48,7 +50,7 @@ public class CreateScheduleTest {
         var team2 = createTeam("t2");
         var moment = Moment.MORNING;
 
-        var schedule = new Schedule("1");
+        var schedule = new Schedule("1", LocalDate.now());
         schedule.organize(team1, team2, moment);
 
        var exception = assertThrows(
@@ -67,7 +69,7 @@ public class CreateScheduleTest {
 
         var moment = Moment.MORNING;
 
-        var schedule = new Schedule("1");
+        var schedule = new Schedule("1", LocalDate.now());
         schedule.organize(team1, team2, moment);
 
         var exception = assertThrows(
@@ -85,7 +87,7 @@ public class CreateScheduleTest {
 
         var moment = Moment.MORNING;
 
-        var schedule = new Schedule("1");
+        var schedule = new Schedule("1", LocalDate.now());
 
         var exception = assertThrows(
                 IllegalStateException.class,
@@ -101,7 +103,7 @@ public class CreateScheduleTest {
         var team2 = createTeam("t2");
         var moment = Moment.MORNING;
 
-        var schedule = new Schedule("1");
+        var schedule = new Schedule("1", LocalDate.now());
         var organizeMatch =  schedule.organize(team1, team2, moment);
 
         schedule.cancel(organizeMatch.getId());

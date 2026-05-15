@@ -8,6 +8,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Schedule extends BaseEntity<Schedule> {
     private LocalDate day;
@@ -15,14 +16,38 @@ public class Schedule extends BaseEntity<Schedule> {
     private Map<Moment, Match> matches;
 
 
-    public Schedule(String id) {
+    public Schedule() {
+    }
+
+    public Schedule(String id, LocalDate day) {
         super(id);
+        this.day = day;
         this.matches = new EnumMap<>(Moment.class);
+    }
+
+    private Schedule(String id, LocalDate day, Map<Moment, Match> matches) {
+        super(id);
+        this.day = day;
+        this.matches = new EnumMap<>(Moment.class);
+        this.matches = matches;
+    }
+
+    public Map<Moment, Match> getMatches() {
+        return matches;
     }
 
     @Override
     public Schedule deepClone() {
-        return null;
+        return new Schedule(
+                this.id,
+                this.day,
+                matches.keySet().stream()
+                        .collect(
+                                () -> new EnumMap<>(Moment.class),
+                                (map, moment) -> map.put(moment, matches.get(moment).deepClone()),
+                                Map::putAll
+                        )
+        );
     }
 
     public Match organize(Team t1, Team t2, Moment moment) {
@@ -60,7 +85,15 @@ public class Schedule extends BaseEntity<Schedule> {
         moment.ifPresent(matches::remove);
     }
 
-    public Optional<Moment> getAt(Moment moment) {
-        return matches.containsKey(moment) ? Optional.of(moment) : Optional.empty();
+    public Optional<Match> getAt(Moment moment) {
+        return matches.containsKey(moment) ? Optional.of(matches.get(moment)) : Optional.empty();
+    }
+
+    public LocalDate getDay() {
+        return day;
+    }
+
+    public boolean hasMatches() {
+        return !this.matches.isEmpty();
     }
 }
