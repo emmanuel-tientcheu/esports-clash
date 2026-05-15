@@ -3,7 +3,7 @@ package com.example.esport_clash.team.application.useCases;
 import an.awesome.pipelinr.Command;
 import com.example.esport_clash.core.domain.exceptions.NotFoundException;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
-import com.example.esport_clash.team.application.services.TeamRepository;
+import com.example.esport_clash.team.application.ports.TeamRepository;
 
 public class AddPlayerToTeamCommandHandler implements Command.Handler<AddPlayerToTeamCommand, Void> {
     private final PlayerRepository playerRepository;

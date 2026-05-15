@@ -4,7 +4,7 @@ import com.example.esport_clash.core.domain.exceptions.NotFoundException;
 import com.example.esport_clash.player.application.ports.PlayerRepository;
 import com.example.esport_clash.player.domain.model.Player;
 import com.example.esport_clash.player.infrastructure.persistance.ram.InMemoryPlayerRepository;
-import com.example.esport_clash.team.application.services.TeamRepository;
+import com.example.esport_clash.team.application.ports.TeamRepository;
 import com.example.esport_clash.team.application.useCases.AddPlayerToTeamCommand;
 import com.example.esport_clash.team.application.useCases.AddPlayerToTeamCommandHandler;
 import com.example.esport_clash.team.domain.model.Role;

@@ -2,7 +2,7 @@ package com.example.esport_clash.team.e2e;
 
 import com.example.esport_clash.IntegrationTest;
 import com.example.esport_clash.player.domain.viewModel.IdResponse;
-import com.example.esport_clash.team.application.services.TeamRepository;
+import com.example.esport_clash.team.application.ports.TeamRepository;
 import com.example.esport_clash.team.infrastructure.spring.dto.CreateTeamDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

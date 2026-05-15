@@ -2,10 +2,8 @@ package com.example.esport_clash.team.infrastructure.spring.controller;
 
 import an.awesome.pipelinr.Pipeline;
 import com.example.esport_clash.player.domain.viewModel.IdResponse;
-import com.example.esport_clash.team.application.useCases.AddPlayerToTeamCommand;
-import com.example.esport_clash.team.application.useCases.CreateTeamCommand;
-import com.example.esport_clash.team.application.useCases.DeleteTeamCommand;
-import com.example.esport_clash.team.application.useCases.RemovePlayerFromTeamCommand;
+import com.example.esport_clash.team.application.useCases.*;
+import com.example.esport_clash.team.domain.viewModel.TeamViewModel;
 import com.example.esport_clash.team.infrastructure.spring.dto.AddPlayerToTeamDTO;
 import com.example.esport_clash.team.infrastructure.spring.dto.CreateTeamDTO;
 import jakarta.transaction.Transactional;
@@ -21,6 +19,13 @@ public class TeamController {
 
     public TeamController(Pipeline pipeline) {
         this.pipeline = pipeline;
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<TeamViewModel> getTeamById(@PathVariable String id) {
+        var result = this.pipeline.send(new GetTeamByIdCommand(id));
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping

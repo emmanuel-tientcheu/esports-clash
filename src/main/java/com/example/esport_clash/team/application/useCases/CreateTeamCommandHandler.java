@@ -2,7 +2,7 @@ package com.example.esport_clash.team.application.useCases;
 
 import an.awesome.pipelinr.Command;
 import com.example.esport_clash.player.domain.viewModel.IdResponse;
-import com.example.esport_clash.team.application.services.TeamRepository;
+import com.example.esport_clash.team.application.ports.TeamRepository;
 import com.example.esport_clash.team.domain.model.Team;
 
 import java.util.UUID;

@@ -12,6 +12,8 @@ public class Player extends BaseEntity<Player> {
     @Column
     private String name;
 
+    public Player() {}
+
     public Player(final String id, final String name) {
         super(id);
         this.name = name;

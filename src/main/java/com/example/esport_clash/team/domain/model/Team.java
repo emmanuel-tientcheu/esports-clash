@@ -1,14 +1,26 @@
 package com.example.esport_clash.team.domain.model;
 
 import com.example.esport_clash.core.domain.model.BaseEntity;
+import com.example.esport_clash.player.domain.model.Player;
+import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Entity
+@Table(name = "teams")
 public class Team extends BaseEntity<Team> {
+    @Column
     private String name;
+
+    @OneToMany(
+            mappedBy = "team",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
     private Set<TeamMember> members;
 
     public Team() {}
@@ -46,6 +58,7 @@ public class Team extends BaseEntity<Team> {
         this.members.add(new TeamMember(
                 UUID.randomUUID().toString(),
                 playerId,
+                this.id,
                 role
         ));
     }
@@ -68,26 +81,53 @@ public class Team extends BaseEntity<Team> {
         return name;
     }
 
+    public Set<TeamMember> getMembers() {
+        return members;
+    }
 
-    public class TeamMember extends BaseEntity<TeamMember>{
+    @Entity
+    @Table(name = "team_members")
+    public static class TeamMember extends BaseEntity<TeamMember>{
+        @Column(name = "player_id")
         private String playerId;
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "player_id", insertable = false, updatable = false)
+        @MapsId("playerId")
+        private Player player;
+
+        @Column(name = "team_id")
+        private String teamId;
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "team_id", insertable = false, updatable = false)
+        @MapsId("teamId")
+        private Team team;
+
+        @Column()
+        @Enumerated(EnumType.STRING)
         private Role role;
 
         public TeamMember() {}
 
-        private TeamMember (String id, String playerId, Role role) {
+        private TeamMember (String id, String playerId, String teamId, Role role) {
             super(id);
             this.playerId = playerId;
+            this.teamId = teamId;
             this.role = role;
         }
 
         @Override
         public TeamMember deepClone() {
-            return new TeamMember(this.id, this.playerId, this.role);
+            return new TeamMember(this.id, this.playerId, this.teamId, this.role);
         }
 
         public String getPlayerId() {
             return playerId;
+        }
+
+        public Player getPlayer() {
+            return player;
         }
 
         public Role getRole() {

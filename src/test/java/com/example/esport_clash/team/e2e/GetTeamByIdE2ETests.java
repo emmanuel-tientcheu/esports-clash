@@ -6,19 +6,17 @@ import com.example.esport_clash.player.domain.model.Player;
 import com.example.esport_clash.team.application.ports.TeamRepository;
 import com.example.esport_clash.team.domain.model.Role;
 import com.example.esport_clash.team.domain.model.Team;
-import com.example.esport_clash.team.infrastructure.spring.dto.AddPlayerToTeamDTO;
+import com.example.esport_clash.team.domain.viewModel.TeamViewModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-public class AddPlayerToTeamE2ETests extends IntegrationTest {
-
+public class GetTeamByIdE2ETests extends IntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -26,39 +24,58 @@ public class AddPlayerToTeamE2ETests extends IntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    PlayerRepository playerRepository;
+    TeamRepository teamRepository;
 
     @Autowired
-    TeamRepository teamRepository;
+    PlayerRepository playerRepository;
 
     Player player;
     Team team;
 
+    Role role = Role.TOP;
+
     @BeforeEach
     public void setUp() {
-        playerRepository.clear();
+        teamRepository.clear();
         teamRepository.clear();
 
         player = new Player("123", "Player");
         team = new Team("123", "Team1");
+        team.addMember(player.getId(), role);
 
         playerRepository.save(player);
         teamRepository.save(team);
+
+        clearDatabase();
     }
 
     @Test
-    void shouldAddPlayerToTeam() throws Exception {
-        var dto = new AddPlayerToTeamDTO(player.getId(), team.getId(), "TOP");
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/teams/add-player-to-team")
+    void shouldGetTeamById() throws Exception {
+
+        var result = mockMvc.perform(
+                MockMvcRequestBuilders.get("/teams/"+ team.getId())
                         .header("Authorization", createJWT())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto))
+
         )
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
 
-        var expectedTeams = teamRepository.findById(team.getId()).get();
+        var response = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                TeamViewModel.class
+        );
 
-        Assertions.assertTrue(expectedTeams.hasMember(player.getId(), Role.TOP));
+        Assertions.assertNotNull(response);
+
+        Assertions.assertEquals(team.getId(), response.getId());
+        Assertions.assertEquals(team.getName(), response.getName());
+
+        var firstPlayer = response.getMembers().stream().findFirst().get();
+
+        Assertions.assertEquals(player.getId(), firstPlayer.getPlayerId());
+        Assertions.assertEquals(player.getName(), firstPlayer.getPlayerName());
+        Assertions.assertEquals(role.toString(), firstPlayer.getRole());
+
+
     }
 }

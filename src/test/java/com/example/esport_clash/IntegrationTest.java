@@ -4,6 +4,7 @@ package com.example.esport_clash;
 import com.example.esport_clash.auth.application.ports.UserRepository;
 import com.example.esport_clash.auth.application.services.jwtservice.JWTService;
 import com.example.esport_clash.auth.domain.model.User;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,9 @@ public class IntegrationTest {
     @Autowired
     protected UserRepository userRepository;
 
+    @Autowired
+    EntityManager entityManager;
+
     protected String createJWT() {
         var user = this.userRepository.findByEmail("emmanuel@gmail.com").orElse(null);
         if (user == null) {
@@ -28,5 +32,10 @@ public class IntegrationTest {
              userRepository.save(user);
         }
         return "Bearer "+this.jwtService.tokenize(user);
+    }
+
+    protected void clearDatabase() {
+        entityManager.flush();
+        entityManager.clear();
     }
 }

@@ -1,12 +1,9 @@
 package com.example.esport_clash.team.e2e;
 
 import com.example.esport_clash.IntegrationTest;
-import com.example.esport_clash.player.application.ports.PlayerRepository;
-import com.example.esport_clash.player.domain.model.Player;
-import com.example.esport_clash.team.application.services.TeamRepository;
+import com.example.esport_clash.team.application.ports.TeamRepository;
 import com.example.esport_clash.team.domain.model.Role;
 import com.example.esport_clash.team.domain.model.Team;
-import com.example.esport_clash.team.infrastructure.spring.dto.AddPlayerToTeamDTO;
 import com.example.esport_clash.team.infrastructure.spring.dto.RemovePlayerFromTeamDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

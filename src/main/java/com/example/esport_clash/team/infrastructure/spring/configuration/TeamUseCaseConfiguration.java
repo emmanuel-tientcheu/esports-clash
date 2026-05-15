@@ -1,11 +1,9 @@
 package com.example.esport_clash.team.infrastructure.spring.configuration;
 
 import com.example.esport_clash.player.application.ports.PlayerRepository;
-import com.example.esport_clash.team.application.services.TeamRepository;
-import com.example.esport_clash.team.application.useCases.AddPlayerToTeamCommandHandler;
-import com.example.esport_clash.team.application.useCases.CreateTeamCommandHandler;
-import com.example.esport_clash.team.application.useCases.DeleteTeamCommandHandler;
-import com.example.esport_clash.team.application.useCases.RemovePlayerFromTeamCommandHandler;
+import com.example.esport_clash.team.application.ports.TeamQueries;
+import com.example.esport_clash.team.application.ports.TeamRepository;
+import com.example.esport_clash.team.application.useCases.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,5 +27,10 @@ public class TeamUseCaseConfiguration {
     @Bean
     public RemovePlayerFromTeamCommandHandler removePlayerFromTeamUseCase(TeamRepository teamRepository) {
         return new RemovePlayerFromTeamCommandHandler(teamRepository);
+    }
+
+    @Bean
+    public GetTeamByIdCommandHandler getTeamByIdUseCase(TeamQueries teamQueries) {
+        return new GetTeamByIdCommandHandler(teamQueries);
     }
 }

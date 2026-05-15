@@ -1,7 +1,7 @@
 package com.example.esport_clash.team.useCases;
 
 import com.example.esport_clash.core.domain.exceptions.NotFoundException;
-import com.example.esport_clash.team.application.services.TeamRepository;
+import com.example.esport_clash.team.application.ports.TeamRepository;
 import com.example.esport_clash.team.application.useCases.RemovePlayerFromTeamCommand;
 import com.example.esport_clash.team.application.useCases.RemovePlayerFromTeamCommandHandler;
 import com.example.esport_clash.team.domain.model.Role;
